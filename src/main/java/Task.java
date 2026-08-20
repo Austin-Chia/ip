@@ -42,4 +42,22 @@ public class Task {
     public String getDescription() {
         return description;
     }
+
+    /**
+     * Returns the type icon shown before the task status.
+     *
+     * @return {@code T} for a basic todo task
+     */
+    public String getTypeIcon() {
+        return "T";
+    }
+
+    /**
+     * Returns any date or time details for display.
+     *
+     * @return an empty string for a todo task
+     */
+    public String getDateTimeDetails() {
+        return "";
+    }
 }
