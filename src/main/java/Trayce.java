@@ -50,6 +50,22 @@ public class Trayce {
                     } catch (NumberFormatException exception) {
                         System.out.println("Please provide a valid task number.");
                     }
+                } else if (command.toLowerCase().startsWith("unmark ")) {
+                    String taskNumberText = command.substring(7).trim();
+                    try {
+                        int taskNumber = Integer.parseInt(taskNumberText);
+                        int taskIndex = taskNumber - 1;
+
+                        if (taskIndex >= 0 && taskIndex < taskCount) {
+                            completed[taskIndex] = false;
+                            System.out.println("OK, I've marked this task as not done yet:");
+                            System.out.println("  [ ] " + tasks[taskIndex]);
+                        } else {
+                            System.out.println("That task number does not exist.");
+                        }
+                    } catch (NumberFormatException exception) {
+                        System.out.println("Please provide a valid task number.");
+                    }
                 } else if (taskCount < tasks.length) {
                     tasks[taskCount] = command;
                     taskCount++;
