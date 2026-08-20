@@ -13,6 +13,9 @@ public class Trayce {
         System.out.println("Hello! I'm Trayce. What can I do for you?");
 
         String separator = "_".repeat(80);
+        String[] tasks = new String[100];
+        int taskCount = 0;
+
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println(separator);
@@ -24,7 +27,18 @@ public class Trayce {
                     break;
                 }
 
-                System.out.println(command);
+                if (command.equalsIgnoreCase("list")) {
+                    for (int i = 0; i < taskCount; i++) {
+                        System.out.println((i + 1) + ". " + tasks[i]);
+                    }
+                } else if (taskCount < tasks.length) {
+                    tasks[taskCount] = command;
+                    taskCount++;
+                    System.out.println("added: " + command);
+                } else {
+                    System.out.println("I cannot store any more tasks.");
+                }
+
                 System.out.println(separator);
             }
         }
