@@ -4,6 +4,7 @@
 public class Task {
     protected String description;
     protected boolean isDone;
+    protected TaskType type;
 
     /**
      * Creates a new incomplete task.
@@ -11,8 +12,19 @@ public class Task {
      * @param description the text describing the task
      */
     public Task(String description) {
+        this(description, TaskType.TODO);
+    }
+
+    /**
+     * Creates a new incomplete task of the specified type.
+     *
+     * @param description the text describing the task
+     * @param type the kind of task
+     */
+    protected Task(String description, TaskType type) {
         this.description = description;
         this.isDone = false;
+        this.type = type;
     }
 
     /** Marks this task as done. */
@@ -49,7 +61,7 @@ public class Task {
      * @return {@code T} for a basic todo task
      */
     public String getTypeIcon() {
-        return "T";
+        return type.getIcon();
     }
 
     /**

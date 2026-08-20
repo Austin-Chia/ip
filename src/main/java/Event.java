@@ -11,7 +11,7 @@ public class Event extends Task {
      * @param to the end time, stored as entered by the user
      */
     public Event(String description, String from, String to) {
-        super(description);
+        super(description, TaskType.EVENT);
         this.from = from;
         this.to = to;
     }
