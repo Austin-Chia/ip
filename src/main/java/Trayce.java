@@ -13,8 +13,7 @@ public class Trayce {
         System.out.println("Hello! I'm Trayce. What can I do for you?");
 
         String separator = "_".repeat(80);
-        String[] tasks = new String[100];
-        boolean[] completed = new boolean[100];
+        Task[] tasks = new Task[100];
         int taskCount = 0;
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -31,8 +30,8 @@ public class Trayce {
                 if (command.equalsIgnoreCase("list")) {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < taskCount; i++) {
-                        String status = completed[i] ? "X" : " ";
-                        System.out.println((i + 1) + ".[" + status + "] " + tasks[i]);
+                        System.out.println((i + 1) + ".[" + tasks[i].getStatusIcon() + "] "
+                                + tasks[i].getDescription());
                     }
                 } else if (command.toLowerCase().startsWith("mark ")) {
                     String taskNumberText = command.substring(5).trim();
@@ -41,9 +40,9 @@ public class Trayce {
                         int taskIndex = taskNumber - 1;
 
                         if (taskIndex >= 0 && taskIndex < taskCount) {
-                            completed[taskIndex] = true;
+                            tasks[taskIndex].markAsDone();
                             System.out.println("Nice! I've marked this task as done:");
-                            System.out.println("  [X] " + tasks[taskIndex]);
+                            System.out.println("  [X] " + tasks[taskIndex].getDescription());
                         } else {
                             System.out.println("That task number does not exist.");
                         }
@@ -57,9 +56,9 @@ public class Trayce {
                         int taskIndex = taskNumber - 1;
 
                         if (taskIndex >= 0 && taskIndex < taskCount) {
-                            completed[taskIndex] = false;
+                            tasks[taskIndex].markAsNotDone();
                             System.out.println("OK, I've marked this task as not done yet:");
-                            System.out.println("  [ ] " + tasks[taskIndex]);
+                            System.out.println("  [ ] " + tasks[taskIndex].getDescription());
                         } else {
                             System.out.println("That task number does not exist.");
                         }
@@ -67,7 +66,7 @@ public class Trayce {
                         System.out.println("Please provide a valid task number.");
                     }
                 } else if (taskCount < tasks.length) {
-                    tasks[taskCount] = command;
+                    tasks[taskCount] = new Task(command);
                     taskCount++;
                     System.out.println("added: " + command);
                 } else {
