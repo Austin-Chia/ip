@@ -68,12 +68,20 @@ public class Trayce {
                     }
                 } else if (taskCount < tasks.length) {
                     Task newTask = createTask(command);
-                    tasks[taskCount] = newTask;
-                    taskCount++;
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  [" + newTask.getTypeIcon() + "][ ] "
-                            + newTask.getDescription() + newTask.getDateTimeDetails());
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    if (newTask == null) {
+                        if (command.equalsIgnoreCase("todo")) {
+                            System.out.println("Please provide a proper action to do.");
+                        } else {
+                            System.out.println("Invalid input. Please try again.");
+                        }
+                    } else {
+                        tasks[taskCount] = newTask;
+                        taskCount++;
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println("  [" + newTask.getTypeIcon() + "][ ] "
+                                + newTask.getDescription() + newTask.getDateTimeDetails());
+                        System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    }
                 } else {
                     System.out.println("I cannot store any more tasks.");
                 }
@@ -88,31 +96,33 @@ public class Trayce {
         String lowerCaseCommand = command.toLowerCase();
 
         if (lowerCaseCommand.startsWith("todo ")) {
-            return new Task(command.substring(5).trim());
+            String description = command.substring(5).trim();
+            return description.isEmpty() ? null : new Task(description);
         }
 
         if (lowerCaseCommand.startsWith("deadline ")) {
             String taskDetails = command.substring(9).trim();
             int byIndex = taskDetails.toLowerCase().indexOf(" /by ");
-            if (byIndex >= 0) {
+            if (byIndex > 0 && !taskDetails.substring(byIndex + 5).trim().isEmpty()) {
                 return new Deadline(taskDetails.substring(0, byIndex).trim(),
                         taskDetails.substring(byIndex + 5).trim());
             }
-            return new Deadline(taskDetails, "");
+            return null;
         }
 
         if (lowerCaseCommand.startsWith("event ")) {
             String taskDetails = command.substring(6).trim();
             int fromIndex = taskDetails.toLowerCase().indexOf(" /from ");
             int toIndex = taskDetails.toLowerCase().indexOf(" /to ");
-            if (fromIndex >= 0 && toIndex > fromIndex) {
+            if (fromIndex > 0 && toIndex > fromIndex
+                    && !taskDetails.substring(toIndex + 5).trim().isEmpty()) {
                 return new Event(taskDetails.substring(0, fromIndex).trim(),
                         taskDetails.substring(fromIndex + 7, toIndex).trim(),
                         taskDetails.substring(toIndex + 5).trim());
             }
-            return new Event(taskDetails, "", "");
+            return null;
         }
 
-        return new Task(command);
+        return null;
     }
 }
