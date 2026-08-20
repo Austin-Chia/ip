@@ -34,6 +34,32 @@ public class Trayce {
                                 + tasks[i].getStatusIcon() + "] " + tasks[i].getDescription()
                                 + tasks[i].getDateTimeDetails());
                     }
+                } else if (command.toLowerCase().startsWith("delete ")) {
+                    String taskNumberText = command.substring(7).trim();
+                    try {
+                        int taskNumber = Integer.parseInt(taskNumberText);
+                        int taskIndex = taskNumber - 1;
+
+                        if (taskIndex >= 0 && taskIndex < taskCount) {
+                            Task deletedTask = tasks[taskIndex];
+                            for (int i = taskIndex; i < taskCount - 1; i++) {
+                                tasks[i] = tasks[i + 1];
+                            }
+                            tasks[taskCount - 1] = null;
+                            taskCount--;
+
+                            System.out.println("Noted. I've removed this task:");
+                            System.out.println("  [" + deletedTask.getTypeIcon() + "]["
+                                    + deletedTask.getStatusIcon() + "] "
+                                    + deletedTask.getDescription()
+                                    + deletedTask.getDateTimeDetails());
+                            System.out.println("Now you have " + taskCount + " tasks in the list.");
+                        } else {
+                            System.out.println("That task number does not exist.");
+                        }
+                    } catch (NumberFormatException exception) {
+                        System.out.println("Please provide a valid task number.");
+                    }
                 } else if (command.toLowerCase().startsWith("mark ")) {
                     String taskNumberText = command.substring(5).trim();
                     try {
