@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +52,11 @@ public class Storage {
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Deadline deadline) {
             return "D\t" + status + "\t" + escape(task.getDescription())
-                    + "\t" + escape(deadline.getBy());
+                    + "\t" + deadline.getBy();
         }
         if (task instanceof Event event) {
             return "E\t" + status + "\t" + escape(task.getDescription())
-                    + "\t" + escape(event.getFrom()) + "\t" + escape(event.getTo());
+                    + "\t" + event.getFrom() + "\t" + event.getTo();
         }
         return "T\t" + status + "\t" + escape(task.getDescription());
     }
@@ -71,9 +72,9 @@ public class Storage {
         if (parts[0].equals("T") && parts.length == 3) {
             task = new Task(unescape(parts[2]));
         } else if (parts[0].equals("D") && parts.length == 4) {
-            task = new Deadline(unescape(parts[2]), unescape(parts[3]));
+            task = new Deadline(unescape(parts[2]), LocalDate.parse(parts[3]));
         } else if (parts[0].equals("E") && parts.length == 5) {
-            task = new Event(unescape(parts[2]), unescape(parts[3]), unescape(parts[4]));
+            task = new Event(unescape(parts[2]), LocalDate.parse(parts[3]), LocalDate.parse(parts[4]));
         } else {
             return null;
         }
