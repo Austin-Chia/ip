@@ -25,4 +25,22 @@ public class Event extends Task {
     public String getDateTimeDetails() {
         return " (from: " + from + " to: " + to + ")";
     }
+
+    /**
+     * Returns the event start time as entered by the user.
+     *
+     * @return the start-time text
+     */
+    public String getFrom() {
+        return from;
+    }
+
+    /**
+     * Returns the event end time as entered by the user.
+     *
+     * @return the end-time text
+     */
+    public String getTo() {
+        return to;
+    }
 }
