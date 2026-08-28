@@ -19,11 +19,21 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the type icon "D" representing a deadline task
+     */
     @Override
     public String getTypeIcon() {
         return "D";
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the formatted deadline date representation
+     */
     @Override
     public String getDateTimeDetails() {
         return " (by: " + by.format(DISPLAY_FORMAT) + ")";

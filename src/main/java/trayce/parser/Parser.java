@@ -10,6 +10,12 @@ import trayce.task.Task;
 /** Converts supported task-creation commands into task objects. */
 public class Parser {
     /**
+     * Creates a new Parser instance.
+     */
+    public Parser() {
+    }
+
+    /**
      * Parses a todo, deadline, or event command.
      *
      * @param command the complete user command
@@ -30,7 +36,12 @@ public class Parser {
         return null;
     }
 
-    /** Parses the description and date in a deadline command. */
+    /**
+     * Parses the description and date in a deadline command.
+     *
+     * @param taskDetails the details string containing the description and deadline date
+     * @return the parsed deadline task, or {@code null} if parsing failed or input format was invalid
+     */
     private Task parseDeadline(String taskDetails) {
         int byIndex = taskDetails.toLowerCase().indexOf(" /by ");
         if (byIndex <= 0 || taskDetails.substring(byIndex + 5).trim().isEmpty()) {
@@ -44,7 +55,12 @@ public class Parser {
         }
     }
 
-    /** Parses the description and dates in an event command. */
+    /**
+     * Parses the description and dates in an event command.
+     *
+     * @param taskDetails the details string containing the description and event start/end dates
+     * @return the parsed event task, or {@code null} if parsing failed or input format was invalid
+     */
     private Task parseEvent(String taskDetails) {
         int fromIndex = taskDetails.toLowerCase().indexOf(" /from ");
         int toIndex = taskDetails.toLowerCase().indexOf(" /to ");

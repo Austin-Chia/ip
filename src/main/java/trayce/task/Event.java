@@ -22,11 +22,21 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the type icon "E" representing an event task
+     */
     @Override
     public String getTypeIcon() {
         return "E";
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the formatted event date range representation
+     */
     @Override
     public String getDateTimeDetails() {
         return " (from: " + from.format(DISPLAY_FORMAT) + " to: " + to.format(DISPLAY_FORMAT) + ")";

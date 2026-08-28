@@ -17,6 +17,12 @@ public class Storage {
     private static final Path DATA_FILE = Path.of("data", "trayce.txt");
 
     /**
+     * Creates a new Storage instance.
+     */
+    public Storage() {
+    }
+
+    /**
      * Loads the saved tasks. A missing data file is treated as an empty task list.
      *
      * @return the tasks stored in the data file
@@ -52,7 +58,12 @@ public class Storage {
         Files.write(DATA_FILE, lines, StandardCharsets.UTF_8);
     }
 
-    /** Converts one task into a tab-separated line for the data file. */
+    /**
+     * Converts one task into a tab-separated line for the data file.
+     *
+     * @param task the task to serialize
+     * @return the serialized tab-separated line representation of the task
+     */
     private String writeTask(Task task) {
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Deadline deadline) {
@@ -66,7 +77,12 @@ public class Storage {
         return "T\t" + status + "\t" + escape(task.getDescription());
     }
 
-    /** Recreates one task from a tab-separated data-file line. */
+    /**
+     * Recreates one task from a tab-separated data-file line.
+     *
+     * @param line the serialized line containing the task data
+     * @return the deserialized task object, or {@code null} if parsing failed
+     */
     private Task readTask(String line) {
         String[] parts = line.split("\\t", -1);
         if (parts.length < 3) {
@@ -90,12 +106,23 @@ public class Storage {
         return task;
     }
 
-    /** Escapes characters that would otherwise interfere with the one-line file format. */
+    /**
+     * Escapes characters that would otherwise interfere with the one-line file format.
+     * Special characters handled: backslash, tab, newline.
+     *
+     * @param text the raw text string to escape
+     * @return the escaped string safe for storage
+     */
     private String escape(String text) {
         return text.replace("\\", "\\\\").replace("\t", "\\t").replace("\n", "\\n");
     }
 
-    /** Reverses {@link #escape(String)} while retaining ordinary backslashes. */
+    /**
+     * Reverses {@link #escape(String)} while retaining ordinary backslashes.
+     *
+     * @param text the escaped text string to unescape
+     * @return the plain text string after unescaping special characters
+     */
     private String unescape(String text) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
