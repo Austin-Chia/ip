@@ -77,4 +77,12 @@ public class TaskList {
     public boolean isFull() {
         return tasks.size() >= MAX_TASKS;
     }
+
+    /** Returns tasks whose descriptions contain the given keyword. */
+    public List<Task> find(String keyword) {
+        String lowerCaseKeyword = keyword.toLowerCase();
+        return tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase().contains(lowerCaseKeyword))
+                .toList();
+    }
 }
