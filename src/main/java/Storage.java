@@ -34,15 +34,14 @@ public class Storage {
     /**
      * Replaces the data file with the current task list, creating its folder if needed.
      *
-     * @param tasks the task array to save
-     * @param taskCount the number of used entries in the array
+     * @param tasks the tasks to save
      * @throws IOException if the data cannot be written
      */
-    public void saveTasks(Task[] tasks, int taskCount) throws IOException {
+    public void saveTasks(List<Task> tasks) throws IOException {
         Files.createDirectories(DATA_FILE.getParent());
         List<String> lines = new ArrayList<>();
-        for (int i = 0; i < taskCount; i++) {
-            lines.add(writeTask(tasks[i]));
+        for (Task task : tasks) {
+            lines.add(writeTask(task));
         }
         Files.write(DATA_FILE, lines, StandardCharsets.UTF_8);
     }
