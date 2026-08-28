@@ -138,4 +138,14 @@ public class Ui {
     public void showSaveError() {
         System.out.println("I could not save your tasks.");
     }
+
+    /** Shows tasks matching a keyword. */
+    public void showMatchingTasks(List<Task> tasks) {
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            System.out.println((i + 1) + ".[" + task.getTypeIcon() + "][" + task.getStatusIcon() + "] "
+                    + task.getDescription() + task.getDateTimeDetails());
+        }
+    }
 }
