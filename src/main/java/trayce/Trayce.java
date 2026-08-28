@@ -45,6 +45,9 @@ public class Trayce {
     private void handleCommand(String command) {
         if (command.equalsIgnoreCase("list")) {
             ui.showTaskList(taskList.getTasks());
+        } else if (command.toLowerCase().startsWith("find ")) {
+            String keyword = command.substring(5).trim();
+            ui.showMatchingTasks(taskList.find(keyword));
         } else if (command.toLowerCase().startsWith("delete ")) {
             deleteTask(command.substring(7).trim());
         } else if (command.toLowerCase().startsWith("mark ")) {
