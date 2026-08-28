@@ -1,5 +1,11 @@
+package trayce.parser;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+
+import trayce.task.Deadline;
+import trayce.task.Event;
+import trayce.task.Task;
 
 /** Converts supported task-creation commands into task objects. */
 public class Parser {

@@ -1,5 +1,13 @@
+package trayce;
+
 import java.io.IOException;
 import java.util.List;
+
+import trayce.parser.Parser;
+import trayce.storage.Storage;
+import trayce.task.Task;
+import trayce.task.TaskList;
+import trayce.ui.Ui;
 
 /** Coordinates user input, task management, and persistent storage for Trayce. */
 public class Trayce {

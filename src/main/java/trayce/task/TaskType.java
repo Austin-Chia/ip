@@ -1,3 +1,5 @@
+package trayce.task;
+
 /** Identifies the supported kinds of tasks. */
 public enum TaskType {
     TODO("T"),
