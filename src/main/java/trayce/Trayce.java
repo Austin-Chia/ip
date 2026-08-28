@@ -41,7 +41,11 @@ public class Trayce {
         }
     }
 
-    /** Handles one complete user command. */
+    /**
+     * Handles one complete user command.
+     *
+     * @param command the user-entered command string
+     */
     private void handleCommand(String command) {
         if (command.equalsIgnoreCase("list")) {
             ui.showTaskList(taskList.getTasks());
@@ -56,7 +60,11 @@ public class Trayce {
         }
     }
 
-    /** Adds a task created from the command, if valid. */
+    /**
+     * Adds a task created from the command, if valid.
+     *
+     * @param command the task creation command string
+     */
     private void addTask(String command) {
         if (taskList.isFull()) {
             ui.showTaskLimitReached();
@@ -72,7 +80,11 @@ public class Trayce {
         ui.showTaskAdded(task, taskList.size());
     }
 
-    /** Deletes the task whose number was supplied by the user. */
+    /**
+     * Deletes the task whose number was supplied by the user.
+     *
+     * @param taskNumberText the user input representing the task number to delete
+     */
     private void deleteTask(String taskNumberText) {
         Integer taskIndex = parseTaskIndex(taskNumberText);
         if (taskIndex == null) {
@@ -87,7 +99,12 @@ public class Trayce {
         ui.showTaskDeleted(deletedTask, taskList.size());
     }
 
-    /** Marks or unmarks the task whose number was supplied by the user. */
+    /**
+     * Marks or unmarks the task whose number was supplied by the user.
+     *
+     * @param taskNumberText the user input representing the task number
+     * @param markDone {@code true} to mark the task as done, {@code false} to mark it as not done
+     */
     private void markTask(String taskNumberText, boolean markDone) {
         Integer taskIndex = parseTaskIndex(taskNumberText);
         if (taskIndex == null) {
@@ -107,7 +124,12 @@ public class Trayce {
         ui.showTaskMarked(task, markDone);
     }
 
-    /** Converts a one-based task number from the user into a zero-based list index. */
+    /**
+     * Converts a one-based task number from the user into a zero-based list index.
+     *
+     * @param taskNumberText the user input representing the task number
+     * @return the zero-based task index, or {@code null} if the task number is invalid
+     */
     private Integer parseTaskIndex(String taskNumberText) {
         try {
             return Integer.parseInt(taskNumberText) - 1;
@@ -117,7 +139,11 @@ public class Trayce {
         }
     }
 
-    /** Loads saved tasks, using an empty list if the file cannot be read. */
+    /**
+     * Loads saved tasks, using an empty list if the file cannot be read.
+     *
+     * @return the loaded task list, or an empty task list if load failed
+     */
     private TaskList loadTasks() {
         try {
             List<Task> savedTasks = storage.loadTasks();
@@ -137,7 +163,11 @@ public class Trayce {
         }
     }
 
-    /** Starts Trayce. */
+    /**
+     * Starts Trayce.
+     *
+     * @param args command-line arguments (unused)
+     */
     public static void main(String[] args) {
         new Trayce().run();
     }
