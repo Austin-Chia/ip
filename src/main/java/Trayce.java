@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class Trayce {
@@ -162,8 +164,12 @@ public class Trayce {
             String taskDetails = command.substring(9).trim();
             int byIndex = taskDetails.toLowerCase().indexOf(" /by ");
             if (byIndex > 0 && !taskDetails.substring(byIndex + 5).trim().isEmpty()) {
-                return new Deadline(taskDetails.substring(0, byIndex).trim(),
-                        taskDetails.substring(byIndex + 5).trim());
+                try {
+                    return new Deadline(taskDetails.substring(0, byIndex).trim(),
+                            LocalDate.parse(taskDetails.substring(byIndex + 5).trim()));
+                } catch (DateTimeParseException exception) {
+                    return null;
+                }
             }
             return null;
         }
@@ -174,9 +180,13 @@ public class Trayce {
             int toIndex = taskDetails.toLowerCase().indexOf(" /to ");
             if (fromIndex > 0 && toIndex > fromIndex
                     && !taskDetails.substring(toIndex + 5).trim().isEmpty()) {
-                return new Event(taskDetails.substring(0, fromIndex).trim(),
-                        taskDetails.substring(fromIndex + 7, toIndex).trim(),
-                        taskDetails.substring(toIndex + 5).trim());
+                try {
+                    return new Event(taskDetails.substring(0, fromIndex).trim(),
+                            LocalDate.parse(taskDetails.substring(fromIndex + 7, toIndex).trim()),
+                            LocalDate.parse(taskDetails.substring(toIndex + 5).trim()));
+                } catch (DateTimeParseException exception) {
+                    return null;
+                }
             }
             return null;
         }
