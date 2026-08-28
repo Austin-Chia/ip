@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.io.IOException;
+import java.util.List;
 
 public class Trayce {
     public static void main(String[] args) {
@@ -14,7 +16,8 @@ public class Trayce {
 
         String separator = "_".repeat(80);
         Task[] tasks = new Task[100];
-        int taskCount = 0;
+        Storage storage = new Storage();
+        int taskCount = loadTasks(storage, tasks);
 
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
@@ -48,6 +51,8 @@ public class Trayce {
                             tasks[taskCount - 1] = null;
                             taskCount--;
 
+                            saveTasks(storage, tasks, taskCount);
+
                             System.out.println("Noted. I've removed this task:");
                             System.out.println("  [" + deletedTask.getTypeIcon() + "]["
                                     + deletedTask.getStatusIcon() + "] "
@@ -68,6 +73,7 @@ public class Trayce {
 
                         if (taskIndex >= 0 && taskIndex < taskCount) {
                             tasks[taskIndex].markAsDone();
+                            saveTasks(storage, tasks, taskCount);
                             System.out.println("Nice! I've marked this task as done:");
                             System.out.println("  [X] " + tasks[taskIndex].getDescription());
                         } else {
@@ -84,6 +90,7 @@ public class Trayce {
 
                         if (taskIndex >= 0 && taskIndex < taskCount) {
                             tasks[taskIndex].markAsNotDone();
+                            saveTasks(storage, tasks, taskCount);
                             System.out.println("OK, I've marked this task as not done yet:");
                             System.out.println("  [ ] " + tasks[taskIndex].getDescription());
                         } else {
@@ -103,6 +110,7 @@ public class Trayce {
                     } else {
                         tasks[taskCount] = newTask;
                         taskCount++;
+                        saveTasks(storage, tasks, taskCount);
                         System.out.println("Got it. I've added this task:");
                         System.out.println("  [" + newTask.getTypeIcon() + "][ ] "
                                 + newTask.getDescription() + newTask.getDateTimeDetails());
@@ -114,6 +122,30 @@ public class Trayce {
 
                 System.out.println(separator);
             }
+        }
+    }
+
+    /** Loads saved tasks into the fixed-size task array used by the application. */
+    private static int loadTasks(Storage storage, Task[] tasks) {
+        try {
+            List<Task> savedTasks = storage.loadTasks();
+            int taskCount = Math.min(savedTasks.size(), tasks.length);
+            for (int i = 0; i < taskCount; i++) {
+                tasks[i] = savedTasks.get(i);
+            }
+            return taskCount;
+        } catch (IOException exception) {
+            System.out.println("I could not load your saved tasks. Starting with an empty list.");
+            return 0;
+        }
+    }
+
+    /** Saves the current task list and reports an error if disk access fails. */
+    private static void saveTasks(Storage storage, Task[] tasks, int taskCount) {
+        try {
+            storage.saveTasks(tasks, taskCount);
+        } catch (IOException exception) {
+            System.out.println("I could not save your tasks.");
         }
     }
 

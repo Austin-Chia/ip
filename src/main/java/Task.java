@@ -56,6 +56,24 @@ public class Task {
     }
 
     /**
+     * Returns whether this task has been completed.
+     *
+     * @return {@code true} if the task is marked done
+     */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /**
+     * Returns this task's category for saving it to disk.
+     *
+     * @return the task type
+     */
+    public TaskType getType() {
+        return type;
+    }
+
+    /**
      * Returns the type icon shown before the task status.
      *
      * @return {@code T} for a basic todo task

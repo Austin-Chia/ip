@@ -22,4 +22,13 @@ public class Deadline extends Task {
     public String getDateTimeDetails() {
         return " (by: " + by + ")";
     }
+
+    /**
+     * Returns the deadline as entered by the user.
+     *
+     * @return the deadline text
+     */
+    public String getBy() {
+        return by;
+    }
 }
