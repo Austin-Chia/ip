@@ -1,5 +1,9 @@
+package trayce.ui;
+
 import java.util.List;
 import java.util.Scanner;
+
+import trayce.task.Task;
 
 /** Handles all console input and output for the Trayce application. */
 public class Ui {

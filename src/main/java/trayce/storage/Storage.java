@@ -1,3 +1,5 @@
+package trayce.storage;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -5,6 +7,10 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import trayce.task.Deadline;
+import trayce.task.Event;
+import trayce.task.Task;
 
 /** Saves Trayce tasks to, and loads them from, a file in the project directory. */
 public class Storage {
