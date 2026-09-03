@@ -53,12 +53,7 @@ public class Ui {
      * @param tasks the list of tasks to be displayed to the user
      */
     public void showTaskList(List<Task> tasks) {
-        System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            System.out.println((i + 1) + ".[" + task.getTypeIcon() + "][" + task.getStatusIcon() + "] "
-                    + task.getDescription() + task.getDateTimeDetails());
-        }
+        showTasks("Here are the tasks in your list:", tasks.toArray(Task[]::new));
     }
 
     /**
@@ -141,9 +136,14 @@ public class Ui {
 
     /** Shows tasks matching a keyword. */
     public void showMatchingTasks(List<Task> tasks) {
-        System.out.println("Here are the matching tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
+        showTasks("Here are the matching tasks in your list:", tasks.toArray(Task[]::new));
+    }
+
+    /** Displays a heading followed by any number of tasks. */
+    private void showTasks(String heading, Task... tasks) {
+        System.out.println(heading);
+        for (int i = 0; i < tasks.length; i++) {
+            Task task = tasks[i];
             System.out.println((i + 1) + ".[" + task.getTypeIcon() + "][" + task.getStatusIcon() + "] "
                     + task.getDescription() + task.getDateTimeDetails());
         }
