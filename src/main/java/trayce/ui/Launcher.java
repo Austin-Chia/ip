@@ -6,6 +6,6 @@ import javafx.application.Application;
 public class Launcher {
     /** Starts the Trayce graphical interface. */
     public static void main(String[] args) {
-        Application.launch(TrayceGui.class, args);
+        Application.launch(Main.class, args);
     }
 }
