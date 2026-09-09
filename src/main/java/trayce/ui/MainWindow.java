@@ -29,7 +29,7 @@ public class MainWindow extends AnchorPane {
     private Trayce trayce;
 
     private Image userImage = new Image(this.getClass()
-            .getResourceAsStream("/images/DaTrayce.png"));
+            .getResourceAsStream("/images/user.jpg"));
 
     private Image trayceImage = new Image(this.getClass()
             .getResourceAsStream("/images/DaTrayce.png"));
