@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import trayce.task.Deadline;
 import trayce.task.Event;
+import trayce.task.Note;
 import trayce.task.Task;
 
 /** Converts supported task-creation commands into task objects. */
@@ -13,6 +14,7 @@ public class Parser {
     private static final String TODO_COMMAND_PREFIX = "todo ";
     private static final String DEADLINE_COMMAND_PREFIX = "deadline ";
     private static final String EVENT_COMMAND_PREFIX = "event ";
+    private static final String NOTE_COMMAND_PREFIX = "note ";
     private static final String DEADLINE_DELIMITER = " /by ";
     private static final String EVENT_START_DELIMITER = " /from ";
     private static final String EVENT_END_DELIMITER = " /to ";
@@ -24,7 +26,7 @@ public class Parser {
     }
 
     /**
-     * Parses a todo, deadline, or event command.
+     * Parses a todo, deadline, event, or note command.
      *
      * @param command the complete user command
      * @return a new task, or {@code null} if the command is invalid
@@ -40,6 +42,10 @@ public class Parser {
         }
         if (lowerCaseCommand.startsWith(EVENT_COMMAND_PREFIX)) {
             return parseEvent(command.substring(EVENT_COMMAND_PREFIX.length()).trim());
+        }
+        if (lowerCaseCommand.startsWith(NOTE_COMMAND_PREFIX)) {
+            String description = command.substring(NOTE_COMMAND_PREFIX.length()).trim();
+            return description.isEmpty() ? null : new Note(description);
         }
         return null;
     }

@@ -62,6 +62,10 @@ public class TrayceGui extends Application {
             status.setText("Select a task first.");
             return;
         }
+        if (!task.isMarkable()) {
+            status.setText("Notes cannot be marked as done.");
+            return;
+        }
         task.markAsDone();
         refreshTasks();
         status.setText("Marked task as done.");
@@ -69,7 +73,7 @@ public class TrayceGui extends Application {
 
     private void refreshTasks() {
         taskView.setItems(FXCollections.observableArrayList(taskList.getTasks().stream()
-                .map(task -> "[" + task.getStatusIcon() + "] " + task.getDescription())
+                .map(Task::getCompactDisplay)
                 .toList()));
     }
 }
