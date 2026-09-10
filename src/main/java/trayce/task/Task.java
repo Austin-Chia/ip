@@ -72,6 +72,24 @@ public class Task {
     }
 
     /**
+     * Returns whether this item supports a completion status.
+     *
+     * @return {@code true} for tasks that can be marked or unmarked
+     */
+    public boolean isMarkable() {
+        return true;
+    }
+
+    /**
+     * Formats this item for compact task-list displays.
+     *
+     * @return the status, description, and any date details
+     */
+    public String getCompactDisplay() {
+        return "[" + getStatusIcon() + "] " + description + getDateTimeDetails();
+    }
+
+    /**
      * Returns this task's category for saving it to disk.
      *
      * @return the task type
