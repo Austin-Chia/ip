@@ -65,6 +65,8 @@ public class Storage {
      * @return the serialized tab-separated line representation of the task
      */
     private String writeTask(Task task) {
+        // TaskList guarantees non-null entries before they reach persistence.
+        assert task != null : "Task to save must not be null";
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Deadline deadline) {
             return "D\t" + status + "\t" + escape(task.getDescription())
