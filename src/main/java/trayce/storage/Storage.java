@@ -10,16 +10,28 @@ import java.util.List;
 
 import trayce.task.Deadline;
 import trayce.task.Event;
+import trayce.task.Note;
 import trayce.task.Task;
 
 /** Saves Trayce tasks to, and loads them from, a file in the project directory. */
 public class Storage {
-    private static final Path DATA_FILE = Path.of("data", "trayce.txt");
+    private static final Path DEFAULT_DATA_FILE = Path.of("data", "trayce.txt");
+    private final Path dataFile;
 
     /**
      * Creates a new Storage instance.
      */
     public Storage() {
+        this(DEFAULT_DATA_FILE);
+    }
+
+    /**
+     * Creates storage backed by a specific file.
+     *
+     * @param dataFile the file used to load and save tasks
+     */
+    public Storage(Path dataFile) {
+        this.dataFile = dataFile;
     }
 
     /**
@@ -30,11 +42,11 @@ public class Storage {
      */
     public List<Task> loadTasks() throws IOException {
         List<Task> tasks = new ArrayList<>();
-        if (!Files.exists(DATA_FILE)) {
+        if (!Files.exists(dataFile)) {
             return tasks;
         }
 
-        for (String line : Files.readAllLines(DATA_FILE, StandardCharsets.UTF_8)) {
+        for (String line : Files.readAllLines(dataFile, StandardCharsets.UTF_8)) {
             Task task = readTask(line);
             if (task != null) {
                 tasks.add(task);
@@ -50,11 +62,14 @@ public class Storage {
      * @throws IOException if the data cannot be written
      */
     public void saveTasks(List<Task> tasks) throws IOException {
-        Files.createDirectories(DATA_FILE.getParent());
+        Path parentDirectory = dataFile.getParent();
+        if (parentDirectory != null) {
+            Files.createDirectories(parentDirectory);
+        }
         List<String> lines = tasks.stream()
                 .map(this::writeTask)
                 .toList();
-        Files.write(DATA_FILE, lines, StandardCharsets.UTF_8);
+        Files.write(dataFile, lines, StandardCharsets.UTF_8);
     }
 
     /**
@@ -74,6 +89,9 @@ public class Storage {
         if (task instanceof Event event) {
             return "E\t" + status + "\t" + escape(task.getDescription())
                     + "\t" + event.getFrom() + "\t" + event.getTo();
+        }
+        if (task instanceof Note) {
+            return "N\t0\t" + escape(task.getDescription());
         }
         return "T\t" + status + "\t" + escape(task.getDescription());
     }
@@ -97,11 +115,13 @@ public class Storage {
             task = new Deadline(unescape(parts[2]), LocalDate.parse(parts[3]));
         } else if (parts[0].equals("E") && parts.length == 5) {
             task = new Event(unescape(parts[2]), LocalDate.parse(parts[3]), LocalDate.parse(parts[4]));
+        } else if (parts[0].equals("N") && parts.length == 3) {
+            task = new Note(unescape(parts[2]));
         } else {
             return null;
         }
 
-        if (parts[1].equals("1")) {
+        if (task.isMarkable() && parts[1].equals("1")) {
             task.markAsDone();
         }
         return task;
