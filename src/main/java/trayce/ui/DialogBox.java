@@ -26,19 +26,19 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
-    private DialogBox(String text, Image img) {
+    private DialogBox(String text, Image image) {
         try {
             FXMLLoader fxmlLoader =
                     new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
 
         dialog.setText(text);
-        displayPicture.setImage(img);
+        displayPicture.setImage(image);
     }
 
     /**
@@ -46,23 +46,23 @@ public class DialogBox extends HBox {
      * and text is on the right.
      */
     private void flip() {
-        ObservableList<Node> tmp =
-                FXCollections.observableArrayList(this.getChildren());
+        ObservableList<Node> dialogElements =
+                FXCollections.observableArrayList(getChildren());
 
-        Collections.reverse(tmp);
-        getChildren().setAll(tmp);
+        Collections.reverse(dialogElements);
+        getChildren().setAll(dialogElements);
         setAlignment(Pos.TOP_LEFT);
 
         dialog.getStyleClass().add("reply-label");
     }
 
-    public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+    public static DialogBox getUserDialog(String text, Image image) {
+        return new DialogBox(text, image);
     }
 
-    public static DialogBox getTrayceDialog(String text, Image img) {
-        var db = new DialogBox(text, img);
-        db.flip();
-        return db;
+    public static DialogBox getTrayceDialog(String text, Image image) {
+        DialogBox dialogBox = new DialogBox(text, image);
+        dialogBox.flip();
+        return dialogBox;
     }
 }

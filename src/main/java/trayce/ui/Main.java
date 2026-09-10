@@ -13,7 +13,7 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private trayce.Trayce trayce = new trayce.Trayce();
+    private final trayce.Trayce trayce = new trayce.Trayce();
 
     @Override
     public void start(Stage stage) {
@@ -21,9 +21,9 @@ public class Main extends Application {
             FXMLLoader fxmlLoader =
                     new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
 
-            AnchorPane ap = fxmlLoader.load();
+            AnchorPane root = fxmlLoader.load();
 
-            Scene scene = new Scene(ap);
+            Scene scene = new Scene(root);
             stage.setScene(scene);
 
             stage.setMinHeight(220);
@@ -32,8 +32,8 @@ public class Main extends Application {
             fxmlLoader.<MainWindow>getController().setTrayce(trayce);
 
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 }
