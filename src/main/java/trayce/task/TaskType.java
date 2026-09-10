@@ -7,7 +7,9 @@ public enum TaskType {
     /** Represents a deadline task. */
     DEADLINE("D"),
     /** Represents an event task. */
-    EVENT("E");
+    EVENT("E"),
+    /** Represents a note containing reference information. */
+    NOTE("N");
 
     private final String icon;
 

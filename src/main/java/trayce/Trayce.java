@@ -25,6 +25,8 @@ public class Trayce {
             + "  Add a deadline\n\n"
             + "event <description> /from <YYYY-MM-DD> /to <YYYY-MM-DD>\n"
             + "  Add an event\n\n"
+            + "note <text>\n"
+            + "  Record information to remember\n\n"
             + "list\n"
             + "  Show all tasks\n\n"
             + "mark <number> / unmark <number>\n"
@@ -35,12 +37,24 @@ public class Trayce {
             + "  Search your tasks";
 
     private final Ui ui = new Ui();
-    private final Storage storage = new Storage();
+    private final Storage storage;
     private final Parser parser = new Parser();
-    private TaskList taskList = new TaskList();
+    private TaskList taskList;
 
     /** Creates a Trayce application with its required collaborators. */
-    public Trayce() { }
+    public Trayce() {
+        this(new Storage());
+    }
+
+    /**
+     * Creates a Trayce application that stores data in the specified storage component.
+     *
+     * @param storage storage used to load and save tasks and notes
+     */
+    Trayce(Storage storage) {
+        this.storage = storage;
+        taskList = loadTasks();
+    }
 
     /** Processes a command for the graphical interface and returns a response. */
     public String getResponse(String command) {
@@ -77,8 +91,7 @@ public class Trayce {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i);
-            result.append(i + 1).append(". [").append(task.getStatusIcon()).append("] ")
-                    .append(task.getDescription()).append("\n");
+            result.append(i + 1).append(". ").append(task.getCompactDisplay()).append("\n");
         }
         return result.toString().trim();
     }
@@ -90,9 +103,10 @@ public class Trayce {
         }
 
         Task deletedTask = taskList.delete(index);
-        return deletedTask == null
-                ? INVALID_TASK_NUMBER_MESSAGE
-                : "Deleted: " + deletedTask.getDescription();
+        if (deletedTask == null) {
+            return INVALID_TASK_NUMBER_MESSAGE;
+        }
+        return persistChanges("Deleted: " + deletedTask.getDescription());
     }
 
     private String findTasks(String keyword) {
@@ -106,7 +120,8 @@ public class Trayce {
         Task task = parser.parseTask(command);
         if (task != null) {
             taskList.add(task);
-            return "Added task: " + task.getDescription();
+            String itemType = task.isMarkable() ? "task" : "note";
+            return persistChanges("Added " + itemType + ": " + task.getDescription());
         }
         return "I do not understand that command.";
     }
@@ -117,12 +132,15 @@ public class Trayce {
         if (task == null) {
             return INVALID_TASK_NUMBER_MESSAGE;
         }
+        if (!task.isMarkable()) {
+            return "Notes cannot be marked or unmarked.";
+        }
         if (markDone) {
             task.markAsDone();
-            return "Marked task as done: " + task.getDescription();
+            return persistChanges("Marked task as done: " + task.getDescription());
         }
         task.markAsNotDone();
-        return "Marked task as not done: " + task.getDescription();
+        return persistChanges("Marked task as not done: " + task.getDescription());
     }
 
     private Integer parseTaskNumber(String number) {
@@ -137,7 +155,6 @@ public class Trayce {
     /** Starts the command-line interface. */
     public void run() {
         ui.showWelcome();
-        taskList = loadTasks();
         while (true) {
             ui.showLine();
             String command = ui.readCommand();
@@ -155,6 +172,15 @@ public class Trayce {
             return new TaskList(storage.loadTasks());
         } catch (IOException exception) {
             return new TaskList();
+        }
+    }
+
+    private String persistChanges(String successMessage) {
+        try {
+            storage.saveTasks(taskList.getTasks());
+            return successMessage;
+        } catch (IOException exception) {
+            return successMessage + "\nI could not save your tasks.";
         }
     }
 

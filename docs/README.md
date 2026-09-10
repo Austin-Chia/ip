@@ -20,10 +20,30 @@ Example: `keyword (optional arguments)`
 expected output
 ```
 
-## Feature ABC
+## Managing notes
 
-// Feature details
+Use notes to record short pieces of information that you want to remember but do not need to complete.
 
+Add a note with `note TEXT`:
+
+```text
+note waist size is 76 cm
+```
+
+Trayce responds with:
+
+```text
+Added note: waist size is 76 cm
+```
+
+Notes appear with the `N` icon when you use `list`:
+
+```text
+1. [N] waist size is 76 cm
+```
+
+You can locate notes with `find KEYWORD` and remove them with `delete NUMBER`. Notes cannot be marked or
+unmarked because they contain reference information rather than work to complete.
 
 ## Feature XYZ
 
