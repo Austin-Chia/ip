@@ -24,6 +24,11 @@ public class Task {
      * @param type the kind of task
      */
     protected Task(String description, TaskType type) {
+        // Parsers and storage must supply meaningful descriptions before creating tasks.
+        assert description != null && !description.isBlank()
+                : "Task description must not be null or blank";
+        // Every task needs a type because display and storage logic depend on it.
+        assert type != null : "Task type must not be null";
         this.description = description;
         this.isDone = false;
         this.type = type;

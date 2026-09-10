@@ -16,6 +16,8 @@ public class Deadline extends Task {
      */
     public Deadline(String description, LocalDate by) {
         super(description, TaskType.DEADLINE);
+        // A deadline without a date cannot be displayed or saved correctly.
+        assert by != null : "Deadline date must not be null";
         this.by = by;
     }
 

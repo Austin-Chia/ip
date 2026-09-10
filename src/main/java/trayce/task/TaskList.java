@@ -19,6 +19,11 @@ public class TaskList {
      * @param savedTasks tasks read from storage
      */
     public TaskList(List<Task> savedTasks) {
+        // Storage must return a collection, even when there are no saved tasks.
+        assert savedTasks != null : "Saved task list must not be null";
+        // A null entry would break every task-list display and update operation.
+        assert savedTasks.stream().noneMatch(task -> task == null)
+                : "Saved task list must not contain null tasks";
         tasks = new ArrayList<>(savedTasks.subList(0, Math.min(savedTasks.size(), MAX_TASKS)));
     }
 
@@ -28,6 +33,8 @@ public class TaskList {
      * @param task the task to be added
      */
     public void add(Task task) {
+        // Only successfully parsed tasks should reach the task list.
+        assert task != null : "Task to add must not be null";
         tasks.add(task);
     }
 
