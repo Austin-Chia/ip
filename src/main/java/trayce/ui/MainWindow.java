@@ -28,10 +28,10 @@ public class MainWindow extends AnchorPane {
 
     private Trayce trayce;
 
-    private Image userImage = new Image(this.getClass()
+    private final Image userImage = new Image(this.getClass()
             .getResourceAsStream("/images/user.jpg"));
 
-    private Image trayceImage = new Image(this.getClass()
+    private final Image trayceImage = new Image(this.getClass()
             .getResourceAsStream("/images/DaTrayce.png"));
 
     @FXML
@@ -42,8 +42,8 @@ public class MainWindow extends AnchorPane {
     /**
      * Injects the Trayce instance.
      */
-    public void setTrayce(Trayce d) {
-        trayce = d;
+    public void setTrayce(Trayce trayce) {
+        this.trayce = trayce;
     }
 
     /**
