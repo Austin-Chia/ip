@@ -34,6 +34,7 @@ public class MainWindow extends AnchorPane {
     private final Image trayceImage = new Image(this.getClass()
             .getResourceAsStream("/images/DaTrayce.png"));
 
+    /** Initializes automatic scrolling as new dialog boxes are added. */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());

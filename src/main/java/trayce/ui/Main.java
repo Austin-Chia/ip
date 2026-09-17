@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -34,7 +35,17 @@ public class Main extends Application {
 
             stage.show();
         } catch (IOException exception) {
-            exception.printStackTrace();
+            showStartupError();
         }
+    }
+
+    /** Shows a clear error when the application layout cannot be loaded. */
+    private void showStartupError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Trayce startup error");
+        alert.setHeaderText("Trayce could not start");
+        alert.setContentText("The application layout could not be loaded. "
+                + "Please reinstall Trayce and try again.");
+        alert.showAndWait();
     }
 }

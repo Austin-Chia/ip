@@ -8,7 +8,6 @@ import trayce.parser.ParseException;
 import trayce.storage.Storage;
 import trayce.task.Task;
 import trayce.task.TaskList;
-import trayce.ui.Ui;
 
 /** Coordinates user input, task management, and persistent storage for Trayce. */
 public class Trayce {
@@ -40,7 +39,6 @@ public class Trayce {
             + "find <keyword>\n"
             + "  Search your tasks";
 
-    private final Ui ui = new Ui();
     private final Storage storage;
     private final Parser parser = new Parser();
     private TaskList taskList;
@@ -190,24 +188,6 @@ public class Trayce {
         }
     }
 
-    /** Starts the command-line interface. */
-    public void run() {
-        ui.showWelcome();
-        if (loadError) {
-            ui.showLoadError();
-        }
-        while (true) {
-            ui.showLine();
-            String command = ui.readCommand();
-            ui.showLine();
-            if (command.equalsIgnoreCase("bye")) {
-                ui.showGoodbye();
-                break;
-            }
-            getResponse(command);
-        }
-    }
-
     private TaskList loadTasks() {
         try {
             return new TaskList(storage.loadTasks());
@@ -224,10 +204,5 @@ public class Trayce {
         } catch (IOException exception) {
             return successMessage + "\nI could not save your tasks.";
         }
-    }
-
-    /** Starts Trayce. */
-    public static void main(String[] args) {
-        new Trayce().run();
     }
 }
