@@ -35,6 +35,9 @@ public class TaskList {
     public void add(Task task) {
         // Only successfully parsed tasks should reach the task list.
         assert task != null : "Task to add must not be null";
+        if (isFull()) {
+            throw new IllegalStateException("Task list capacity has been reached");
+        }
         tasks.add(task);
     }
 
@@ -83,6 +86,19 @@ public class TaskList {
      */
     public boolean isFull() {
         return tasks.size() >= MAX_TASKS;
+    }
+
+    /**
+     * Returns whether an item with the same type, description, and date details already exists.
+     * Completion status is deliberately ignored because marking a task does not make it a new task.
+     *
+     * @param candidate item to compare with the current list
+     * @return {@code true} if an equivalent item is already stored
+     */
+    public boolean containsEquivalent(Task candidate) {
+        return tasks.stream().anyMatch(task -> task.getType() == candidate.getType()
+                && task.getDescription().equalsIgnoreCase(candidate.getDescription())
+                && task.getDateTimeDetails().equals(candidate.getDateTimeDetails()));
     }
 
     /** Returns tasks whose descriptions contain the given keyword. */

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import trayce.parser.Parser;
+import trayce.parser.ParseException;
 import trayce.storage.Storage;
 import trayce.task.Task;
 import trayce.task.TaskList;
@@ -43,6 +44,7 @@ public class Trayce {
     private final Storage storage;
     private final Parser parser = new Parser();
     private TaskList taskList;
+    private boolean loadError;
 
     /** Creates a Trayce application with its required collaborators. */
     public Trayce() {
@@ -61,12 +63,17 @@ public class Trayce {
 
     /** Returns Trayce's introductory message for a newly opened chat. */
     public String getGreeting() {
-        return GREETING;
+        return loadError
+                ? GREETING + "\n\nI could not read the saved trail, so I started with an empty list."
+                : GREETING;
     }
 
     /** Processes a command for the graphical interface and returns a response. */
     public String getResponse(String command) {
-        String trimmedCommand = command.trim();
+        String trimmedCommand = command == null ? "" : command.trim();
+        if (trimmedCommand.isEmpty()) {
+            return "The command is empty. Type 'help' to view the trail map.";
+        }
         String lowerCaseCommand = trimmedCommand.toLowerCase(Locale.ROOT);
 
         if (lowerCaseCommand.equals(HELP_COMMAND)) {
@@ -74,6 +81,16 @@ public class Trayce {
         }
         if (lowerCaseCommand.equals(LIST_COMMAND)) {
             return getTaskListResponse();
+        }
+        if (lowerCaseCommand.equals("bye")) {
+            return "Safe travels, explorer! Your trail is saved.";
+        }
+        if (lowerCaseCommand.equals("mark") || lowerCaseCommand.equals("unmark")
+                || lowerCaseCommand.equals("delete")) {
+            return INVALID_TASK_NUMBER_MESSAGE;
+        }
+        if (lowerCaseCommand.equals("find")) {
+            return "Tell me what to search for. Try: find <keyword>";
         }
         if (lowerCaseCommand.startsWith(MARK_COMMAND_PREFIX)) {
             return updateTaskStatus(trimmedCommand.substring(MARK_COMMAND_PREFIX.length()), true);
@@ -118,21 +135,33 @@ public class Trayce {
     }
 
     private String findTasks(String keyword) {
-        return taskList.find(keyword.trim()).stream()
+        String trimmedKeyword = keyword.trim();
+        if (trimmedKeyword.isEmpty()) {
+            return "Tell me what to search for. Try: find <keyword>";
+        }
+        String matches = taskList.find(trimmedKeyword).stream()
                 .map(Task::getDescription)
                 .reduce("", (firstDescription, nextDescription) -> firstDescription + nextDescription + "\n")
                 .trim();
+        return matches.isEmpty() ? "No trail items match '" + trimmedKeyword + "'." : matches;
     }
 
     private String addTask(String command) {
-        Task task = parser.parseTask(command);
-        if (task != null) {
+        try {
+            Task task = parser.parseTask(command);
+            if (taskList.isFull()) {
+                return "The trail pack is full. Delete an item before adding another.";
+            }
+            if (taskList.containsEquivalent(task)) {
+                return "That item is already on the trail.";
+            }
             taskList.add(task);
             String itemType = task.isMarkable() ? "task" : "note";
             return persistChanges("Packed for the journey! Added " + itemType + ": "
                     + task.getDescription());
+        } catch (ParseException exception) {
+            return exception.getMessage();
         }
-        return "I lost that trail. Type 'help' to check the trail map.";
     }
 
     private String updateTaskStatus(String number, boolean markDone) {
@@ -164,6 +193,9 @@ public class Trayce {
     /** Starts the command-line interface. */
     public void run() {
         ui.showWelcome();
+        if (loadError) {
+            ui.showLoadError();
+        }
         while (true) {
             ui.showLine();
             String command = ui.readCommand();
@@ -180,6 +212,7 @@ public class Trayce {
         try {
             return new TaskList(storage.loadTasks());
         } catch (IOException exception) {
+            loadError = true;
             return new TaskList();
         }
     }

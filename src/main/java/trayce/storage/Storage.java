@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +48,12 @@ public class Storage {
         }
 
         for (String line : Files.readAllLines(dataFile, StandardCharsets.UTF_8)) {
-            Task task = readTask(line);
+            Task task;
+            try {
+                task = readTask(line);
+            } catch (DateTimeParseException | IllegalArgumentException exception) {
+                task = null;
+            }
             if (task != null) {
                 tasks.add(task);
             }
@@ -108,6 +114,10 @@ public class Storage {
             return null;
         }
 
+        if ((!parts[1].equals("0") && !parts[1].equals("1")) || parts[2].isBlank()) {
+            return null;
+        }
+
         Task task;
         if (parts[0].equals("T") && parts.length == 3) {
             task = new Task(unescape(parts[2]));
@@ -115,7 +125,7 @@ public class Storage {
             task = new Deadline(unescape(parts[2]), LocalDate.parse(parts[3]));
         } else if (parts[0].equals("E") && parts.length == 5) {
             task = new Event(unescape(parts[2]), LocalDate.parse(parts[3]), LocalDate.parse(parts[4]));
-        } else if (parts[0].equals("N") && parts.length == 3) {
+        } else if (parts[0].equals("N") && parts.length == 3 && parts[1].equals("0")) {
             task = new Note(unescape(parts[2]));
         } else {
             return null;
