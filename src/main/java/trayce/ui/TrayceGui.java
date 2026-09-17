@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import trayce.parser.Parser;
+import trayce.parser.ParseException;
 import trayce.task.Task;
 import trayce.task.TaskList;
 
@@ -44,15 +45,15 @@ public class TrayceGui extends Application {
     }
 
     private void addTask(TextField commandField) {
-        Task task = parser.parseTask(commandField.getText());
-        if (task == null) {
-            status.setText("Invalid task command.");
-            return;
+        try {
+            Task task = parser.parseTask(commandField.getText());
+            taskList.add(task);
+            commandField.clear();
+            refreshTasks();
+            status.setText("Added task " + taskList.size() + ".");
+        } catch (ParseException | IllegalStateException exception) {
+            status.setText(exception.getMessage());
         }
-        taskList.add(task);
-        commandField.clear();
-        refreshTasks();
-        status.setText("Added task " + taskList.size() + ".");
     }
 
     private void markSelectedTask() {

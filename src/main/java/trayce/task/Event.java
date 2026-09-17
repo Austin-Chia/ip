@@ -21,6 +21,9 @@ public class Event extends Task {
         // Both dates are required by event display and storage operations.
         assert from != null : "Event start date must not be null";
         assert to != null : "Event end date must not be null";
+        if (!from.isBefore(to)) {
+            throw new IllegalArgumentException("Event start date must be before end date");
+        }
         this.from = from;
         this.to = to;
     }
