@@ -11,14 +11,17 @@ import trayce.ui.Ui;
 
 /** Coordinates user input, task management, and persistent storage for Trayce. */
 public class Trayce {
+    private static final String GREETING = "Hello, explorer! I'm Trayce, your trail guide for tasks.\n"
+            + "Tell me what is ahead, or type 'help' to open the trail map.";
     private static final String HELP_COMMAND = "help";
     private static final String LIST_COMMAND = "list";
     private static final String MARK_COMMAND_PREFIX = "mark ";
     private static final String UNMARK_COMMAND_PREFIX = "unmark ";
     private static final String DELETE_COMMAND_PREFIX = "delete ";
     private static final String FIND_COMMAND_PREFIX = "find ";
-    private static final String INVALID_TASK_NUMBER_MESSAGE = "Please provide a valid task number.";
-    private static final String HELP_MESSAGE = "Here are the commands you can use:\n\n"
+    private static final String INVALID_TASK_NUMBER_MESSAGE = "That trail marker is missing. "
+            + "Please provide a valid task number.";
+    private static final String HELP_MESSAGE = "Trail map — here are the commands you can use:\n\n"
             + "todo <description>\n"
             + "  Add a task\n\n"
             + "deadline <description> /by <YYYY-MM-DD>\n"
@@ -56,6 +59,11 @@ public class Trayce {
         taskList = loadTasks();
     }
 
+    /** Returns Trayce's introductory message for a newly opened chat. */
+    public String getGreeting() {
+        return GREETING;
+    }
+
     /** Processes a command for the graphical interface and returns a response. */
     public String getResponse(String command) {
         String trimmedCommand = command.trim();
@@ -85,7 +93,7 @@ public class Trayce {
 
     private String getTaskListResponse() {
         if (taskList.size() == 0) {
-            return "Your task list is empty.";
+            return "The trail is clear — your task list is empty.";
         }
 
         StringBuilder result = new StringBuilder();
@@ -106,7 +114,7 @@ public class Trayce {
         if (deletedTask == null) {
             return INVALID_TASK_NUMBER_MESSAGE;
         }
-        return persistChanges("Deleted: " + deletedTask.getDescription());
+        return persistChanges("Trail cleared! Removed: " + deletedTask.getDescription());
     }
 
     private String findTasks(String keyword) {
@@ -121,9 +129,10 @@ public class Trayce {
         if (task != null) {
             taskList.add(task);
             String itemType = task.isMarkable() ? "task" : "note";
-            return persistChanges("Added " + itemType + ": " + task.getDescription());
+            return persistChanges("Packed for the journey! Added " + itemType + ": "
+                    + task.getDescription());
         }
-        return "I do not understand that command.";
+        return "I lost that trail. Type 'help' to check the trail map.";
     }
 
     private String updateTaskStatus(String number, boolean markDone) {
@@ -133,14 +142,14 @@ public class Trayce {
             return INVALID_TASK_NUMBER_MESSAGE;
         }
         if (!task.isMarkable()) {
-            return "Notes cannot be marked or unmarked.";
+            return "That is a trail note, so it cannot be marked or unmarked.";
         }
         if (markDone) {
             task.markAsDone();
-            return persistChanges("Marked task as done: " + task.getDescription());
+            return persistChanges("Checkpoint reached! Marked as done: " + task.getDescription());
         }
         task.markAsNotDone();
-        return persistChanges("Marked task as not done: " + task.getDescription());
+        return persistChanges("Back on the trail! Marked as not done: " + task.getDescription());
     }
 
     private Integer parseTaskNumber(String number) {
