@@ -1,10 +1,9 @@
 # Trayce User Guide
 
-// Update the title above to match the actual product name
-
 // Product screenshot goes here
 
-// Product intro goes here
+Trayce is a friendly task trail guide that helps you track todos, deadlines, events, and notes.
+Type `help` in the application to see the complete command trail map.
 
 ## Adding deadlines
 
@@ -33,7 +32,7 @@ note waist size is 76 cm
 Trayce responds with:
 
 ```text
-Added note: waist size is 76 cm
+Packed for the journey! Added note: waist size is 76 cm
 ```
 
 Notes appear with the `N` icon when you use `list`:

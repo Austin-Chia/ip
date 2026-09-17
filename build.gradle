@@ -36,5 +36,5 @@ test { useJUnitPlatform() }
 application { mainClass = 'trayce.ui.Launcher' }
 checkstyle { toolVersion = '11.0.0' }
 jar { enabled = false; archiveClassifier = 'without-dependencies' }
-shadowJar { archiveFileName = 'duke.jar' }
+shadowJar { archiveFileName = 'trayce.jar' }
 run { standardInput = System.in }
