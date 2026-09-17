@@ -25,6 +25,7 @@ public class Main extends Application {
 
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            stage.setTitle("Trayce — Your Task Trail Guide");
 
             stage.setMinHeight(220);
             stage.setMinWidth(417);

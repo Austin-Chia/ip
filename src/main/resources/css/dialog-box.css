@@ -1,13 +1,13 @@
 .dialog {
-    -fx-background-color: #2b2d31;
-    -fx-text-fill: #f2f3f5;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #10233f;
     -fx-font-size: 14px;
     -fx-padding: 10px 14px;
     -fx-background-radius: 14px 14px 14px 4px;
 }
 
 .reply-label {
-    -fx-background-color: #5865f2;
+    -fx-background-color: #1f4b7a;
     -fx-text-fill: white;
     -fx-background-radius: 14px 14px 4px 14px;
 }

@@ -19,15 +19,17 @@ class TrayceTest {
         Storage storage = new Storage(temporaryDirectory.resolve("trayce.txt"));
         Trayce trayce = new Trayce(storage);
 
-        assertEquals("Added note: remember Interstellar", trayce.getResponse("note remember Interstellar"));
+        assertEquals("Packed for the journey! Added note: remember Interstellar",
+                trayce.getResponse("note remember Interstellar"));
         assertEquals("1. [N] remember Interstellar", trayce.getResponse("list"));
         assertEquals("remember Interstellar", trayce.getResponse("find interstellar"));
-        assertEquals("Notes cannot be marked or unmarked.", trayce.getResponse("mark 1"));
+        assertEquals("That is a trail note, so it cannot be marked or unmarked.",
+                trayce.getResponse("mark 1"));
 
         Trayce restartedTrayce = new Trayce(storage);
         assertEquals("1. [N] remember Interstellar", restartedTrayce.getResponse("list"));
 
-        assertEquals("Deleted: remember Interstellar", trayce.getResponse("delete 1"));
-        assertEquals("Your task list is empty.", trayce.getResponse("list"));
+        assertEquals("Trail cleared! Removed: remember Interstellar", trayce.getResponse("delete 1"));
+        assertEquals("The trail is clear — your task list is empty.", trayce.getResponse("list"));
     }
 }
