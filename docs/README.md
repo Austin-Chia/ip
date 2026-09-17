@@ -1,6 +1,6 @@
 # Trayce User Guide
 
-![Trayce task trail guide](images/Ui.png)
+![Trayce task trail guide](Ui.png)
 
 Trayce is a friendly task trail guide for todos, deadlines, events, and reference notes. Enter a
 command in the message box and press **Enter** or click **Send**. Trayce saves every change, so your
